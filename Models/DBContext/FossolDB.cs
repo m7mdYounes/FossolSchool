@@ -21,7 +21,7 @@ namespace FosoolSchool.Models.DBContext
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<Lesson> Lessons { get; set; }
         public virtual DbSet<TeacherTerm> TeacherTerms { get; set; }
-        public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }
+        public virtual DbSet<TeacherGradeSubject> TeacherSubjects { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

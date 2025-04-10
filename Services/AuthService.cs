@@ -26,12 +26,12 @@ namespace FosoolSchool.Services
             _context = context;
         }
 
-        public async Task<ResponseDTO> RegisterAsync(RegisterDTO model)
+        public async Task<(ResponseDTO,string)> RegisterAsync(RegisterDTO model)
         {
             var existingUser = await _userRepository.GetByEmailAsync(model.Email);
             if (existingUser != null)
             {
-                return new ResponseDTO { IsValid = false, Error = "Email already exists" };
+                return new (new ResponseDTO { IsValid = false, Error = "Email already exists" },"");
             }
 
             var user = new User
@@ -57,7 +57,7 @@ namespace FosoolSchool.Services
             await _userRepository.SaveChangesAsync();
 
             var token = _tokenService.GenerateToken(user);
-            return new ResponseDTO { IsValid = true, Data = token, Message = "Registered successfully" };
+            return new( new ResponseDTO { IsValid = true, Data = token, Message = "Registered successfully" },user.Id);
         }
 
         public async Task<ResponseDTO> LoginAsync(LoginDTO model)

@@ -5,6 +5,7 @@ using FosoolSchool.Models.TeacherEntities;
 
 namespace FosoolSchool.Models
 {
+    //grade 1 pri , 2 pri
     public class Grade : BaseEntity
     {
         public string Name { get; set; }
@@ -14,7 +15,7 @@ namespace FosoolSchool.Models
         public virtual Level Level { get; set; }
 
         public virtual List<Subject> Subjects { get; set; } = new();
-        public virtual List<TeacherSubject> TeacherSubjects { get; set; } = new();
+        public virtual List<TeacherGradeSubject> TeacherSubjects { get; set; } = new();
     }
 
 }

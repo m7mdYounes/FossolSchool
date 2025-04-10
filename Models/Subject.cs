@@ -12,7 +12,7 @@ namespace FosoolSchool.Models
         public virtual Grade Grade { get; set; }
 
         public virtual List<Lesson> Lessons { get; set; } = new();
-        public virtual List<TeacherSubject> TeacherSubjects { get; set; } = new();
+        public virtual List<TeacherGradeSubject> TeacherSubjects { get; set; } = new();
     }
 
 }

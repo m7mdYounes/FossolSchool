@@ -2,11 +2,11 @@
 
 namespace FosoolSchool.Models.TeacherEntities
 {
-    public class TeacherSubject : BaseEntity
+    public class TeacherGradeSubject : BaseEntity
     {
-        [ForeignKey("TeacherTerm")]
-        public string TeacherTermId { get; set; }
-        public virtual TeacherTerm TeacherTerm { get; set; }
+        [ForeignKey("Teacher")]
+        public string TeacherId { get; set; }
+        public virtual Teacher Teacher { get; set; }
 
         [ForeignKey("Grade")]
         public string GradeId { get; set; }

@@ -24,7 +24,36 @@ namespace FosoolSchool
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new() { Title = "FosoolSchool API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Description = "Enter your JWT token like this: Bearer {your token}"
+                });
+
+                c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+                {
+                    {
+                       new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                       {
+                          Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                          {
+                                Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                          }
+                       },
+                       Array.Empty<string>()
+                    }
+                });
+            });
+
+            builder.Services.AddHttpContextAccessor();
 
 
             #region Services
@@ -57,14 +86,37 @@ namespace FosoolSchool
 
             #endregion
 
-
+            #region CORS
+            string cors = "";
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(cors,
+                builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                });
+            });
+            #endregion
 
             #region IOC
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IAuthService,AuthService>();
             builder.Services.AddScoped<ITokenService,TokenService>();
             builder.Services.AddScoped<IUserRepo, UserRepo>();
-            //builder.Services.AddScoped<>
+            builder.Services.AddScoped<IAcademicTermService, AcademicTermService>();
+            builder.Services.AddScoped<IAcedemicTermRepo, AcademicTermRepo>();
+            builder.Services.AddScoped<ILevelRepo, LevelRepo>();
+            builder.Services.AddScoped<ILevelService, LevelService>();
+            builder.Services.AddScoped<IGradeRepo, GradeRepo>();
+            builder.Services.AddScoped<IGradeService, GradeService>();
+            builder.Services.AddScoped<ISubjectService, SubjectService>();
+            builder.Services.AddScoped<ISubjectRepo, SubjectRepo>();
+            builder.Services.AddScoped<ILessonService, LessonService>();
+            builder.Services.AddScoped<ILessonRepo, LessonRepo>();
+            builder.Services.AddScoped<IStudentRepo,StudentRepo>();
+            builder.Services.AddScoped<IStudentService, StudentService>();  
 
             #endregion
 
@@ -75,10 +127,14 @@ namespace FosoolSchool
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
             }
+
+            app.UseHttpsRedirection();
 
             app.UseAuthorization();
 
+            app.UseCors(cors);
 
             app.MapControllers();
 

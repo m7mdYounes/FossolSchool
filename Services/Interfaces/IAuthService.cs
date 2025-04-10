@@ -2,7 +2,7 @@
 {
     public interface IAuthService
     {
-        Task<ResponseDTO> RegisterAsync(RegisterDTO model);
+        Task<(ResponseDTO, string)> RegisterAsync(RegisterDTO model);
         Task<ResponseDTO> LoginAsync(LoginDTO model);
     }
 }

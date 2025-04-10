@@ -5,7 +5,8 @@ namespace FosoolSchool.Models
     public class AcademicTerm : BaseEntity
     {
         public string Name { get; set; }
-        public virtual List<Level> Levels { get; set; } = new();
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public virtual List<TeacherTerm> TeacherTerms { get; set; } = new();
     }
 

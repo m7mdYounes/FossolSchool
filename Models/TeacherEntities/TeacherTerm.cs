@@ -11,8 +11,7 @@ namespace FosoolSchool.Models.TeacherEntities
         [ForeignKey("AcademicTerm")]
         public string AcademicTermId { get; set; }
         public virtual AcademicTerm AcademicTerm { get; set; }
-        public virtual List<TeacherGrade> TeacherGrades { get; set; } = new();
-        public virtual List<TeacherSubject> TeacherSubjects { get; set; } = new();
+        public virtual List<TeacherGradeSubject> TeacherSubjects { get; set; } = new();
     }
 
 }
