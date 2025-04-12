@@ -1,4 +1,5 @@
 ﻿using FosoolSchool.DTO.Student;
+using FosoolSchool.DTO.Teacher;
 using FosoolSchool.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,11 +14,13 @@ namespace FosoolSchool.Controllers
     {
         private readonly IStudentService _service;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ITeacherService _teacherService;
 
-        public UserController(IStudentService service, IHttpContextAccessor httpContextAccessor)
+        public UserController(IStudentService service, IHttpContextAccessor httpContextAccessor,ITeacherService teacherService)
         {
             _service = service;
             _httpContextAccessor = httpContextAccessor;
+            _teacherService = teacherService;
         }
 
         private string GetUserIdFromToken()
@@ -77,6 +80,50 @@ namespace FosoolSchool.Controllers
             var teacherId = GetUserIdFromToken();
             var result = await _service.GetByTeacherIdAsync(teacherId);
             return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Students by teacher retrieved successfully" });
+        }
+
+        [HttpPost("get-teacher-all")]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _service.GetAllAsync();
+            return Ok(new ResponseDTO { IsValid = true, Data = result });
+        }
+
+        [HttpPost("get-teacher-by-id/{id}")]
+        [Authorize(Roles = "SuperAdmin,Teacher")]
+        public async Task<IActionResult> GetById([FromRoute] string id)
+        {
+            var result = await _service.GetByIdAsync(id);
+            if (result == null)
+                return NotFound(new ResponseDTO { IsValid = false, Error = "Teacher not found" });
+            return Ok(new ResponseDTO { IsValid = true, Data = result });
+        }
+
+        [HttpPost("create-teacher-basic")]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> CreateBasic([FromBody] CreateTeacherDTO dto)
+        {
+            var userId = GetUserIdFromToken();
+            var result = await _teacherService.AddBasicAsync(dto, userId);
+            return Ok(result);
+        }
+
+        [HttpPost("add-teacher-details")]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> AddDetails([FromBody] UpdateTeacherDetailsDTO dto)
+        {
+            var userId = GetUserIdFromToken();
+            await _teacherService.AddDetailsAsync(dto, userId);
+            return Ok(new ResponseDTO { IsValid = true, Message = "Teacher details saved" });
+        }
+
+        [HttpPost("delete-teacher/{id}")]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<IActionResult> Delete([FromRoute] string id)
+        {
+            await _service.DeleteAsync(id);
+            return Ok(new ResponseDTO { IsValid = true, Message = "Teacher deleted successfully" });
         }
     }
 }
