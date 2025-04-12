@@ -12,58 +12,88 @@ namespace FosoolSchool.Services
         private readonly IStudentRepo _repository;
         private readonly IUserRepo _userRepo;
         private readonly IAuthService _authService;
+        private readonly ITeacherService _teacherService;
 
-        public StudentService(IStudentRepo repository, IUserRepo userRepo , IAuthService authService)
+        public StudentService(IStudentRepo repository, IUserRepo userRepo , IAuthService authService,ITeacherService teacherService)
         {
             _repository = repository;
             _userRepo = userRepo;
             _authService = authService;
+            _teacherService = teacherService;
         }
 
         public async Task<List<UpdateGetStudentDTO>> GetAllAsync()
         {
             var students = await _repository.GetAllAsync();
-            return students.Select(s => new UpdateGetStudentDTO
+            var allTeachers = await _teacherService.GetAllAsync();
+            var teacherDict = allTeachers
+                .Where(t => !string.IsNullOrEmpty(t.Id))
+                .ToDictionary(t => t.Id, t => t.UserName); 
+
+            var result = students.Select(s => new UpdateGetStudentDTO
             {
                 Id = s.Id,
                 UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
-                //TeacherName = s.Teacher?.User?.UserName,
+                TeacherName = s.TeacherId != null && teacherDict.ContainsKey(s.TeacherId)
+                    ? teacherDict[s.TeacherId]
+                    : null,
                 ClassId = s.ClassId,
                 ClassName = s.Class?.Name
             }).ToList();
+
+            return result;
         }
+
 
         public async Task<UpdateGetStudentDTO> GetByIdAsync(string id)
         {
             var s = await _repository.GetByIdAsync(id);
-            return s == null ? null : new UpdateGetStudentDTO
+            if (s == null)
+                return null;
+
+            string teacherName = null;
+
+            if (!string.IsNullOrEmpty(s.TeacherId))
+            {
+                var teacher = await _teacherService.GetByIdAsync(s.TeacherId);
+                teacherName = teacher?.UserName;
+            }
+
+            return new UpdateGetStudentDTO
             {
                 Id = s.Id,
                 UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
-                //TeacherName = s.Teacher?.User?.UserName,
+                TeacherName = teacherName,
                 ClassId = s.ClassId,
                 ClassName = s.Class?.Name
             };
         }
 
+
         public async Task<List<UpdateGetStudentDTO>> GetByTeacherIdAsync(string teacherId)
         {
             var students = await _repository.GetByTeacherIdAsync(teacherId);
+
+            // Get teacher name once based on teacherId
+            var teacher = await _teacherService.GetByIdAsync(teacherId);
+            var teacherName = teacher?.UserName;
+
             return students.Select(s => new UpdateGetStudentDTO
             {
                 Id = s.Id,
                 UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
-                //TeacherName = s.Teacher?.User?.UserName,
+                TeacherName = teacherName, 
                 ClassId = s.ClassId,
                 ClassName = s.Class?.Name
             }).ToList();
         }
+
 
         public async Task AddAsync(CreateStudentDTO dto, string userId)
         {
@@ -85,7 +115,7 @@ namespace FosoolSchool.Services
 
             var student = new Student
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = registeredUserId,
                 UserId = registeredUserId,
                 TeacherId = dto.TeacherId,
                 ClassId = dto.ClassId,

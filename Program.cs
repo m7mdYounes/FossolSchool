@@ -119,6 +119,8 @@ namespace FosoolSchool
             builder.Services.AddScoped<IStudentService, StudentService>();  
             builder.Services.AddScoped<ITeacherService, TeacherService>();
             builder.Services.AddScoped<ITeacherRepo, TeacherRepo>();
+            builder.Services.AddScoped<IClassRepo, ClassRepo>();
+            builder.Services.AddScoped<IClassService, ClassService>();
 
             #endregion
 

@@ -28,6 +28,8 @@ namespace FosoolSchool.Controllers
             return _httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         }
 
+        #region student 
+
         [Authorize(Roles = "SuperAdmin,Teacher")]
         [HttpPost("get-all-students")]
         public async Task<IActionResult> GetAllStudents()
@@ -43,6 +45,17 @@ namespace FosoolSchool.Controllers
             var result = await _service.GetByIdAsync(id);
             if (result == null)
                 return NotFound(new ResponseDTO { IsValid = false, Error = "Student not found" });
+
+            return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Student retrieved successfully" });
+        }
+
+        [Authorize(Roles = "Teacher")]
+        [HttpPost("get-students-by-id-teacher")]
+        public async Task<IActionResult> GetStudentbyTeacherId()
+        {
+            var result = await _service.GetByTeacherIdAsync(GetUserIdFromToken());
+            if (result == null)
+                return NotFound(new ResponseDTO { IsValid = false, Error = "Teacher not found" });
 
             return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Student retrieved successfully" });
         }
@@ -72,6 +85,9 @@ namespace FosoolSchool.Controllers
             await _service.DeleteAsync(id);
             return Ok(new ResponseDTO { IsValid = true, Message = "Student deleted successfully" });
         }
+        #endregion
+
+        #region teacher 
 
         [HttpPost("get-students-by-teacher")]
         [Authorize(Roles = "SuperAdmin,Teacher")]
@@ -125,5 +141,6 @@ namespace FosoolSchool.Controllers
             await _teacherService.DeleteAsync(id);
             return Ok(new ResponseDTO { IsValid = true, Message = "Teacher deleted successfully" });
         }
+        #endregion
     }
 }
