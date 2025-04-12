@@ -84,17 +84,17 @@ namespace FosoolSchool.Controllers
 
         [HttpPost("get-teacher-all")]
         [Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllTeachers()
         {
-            var result = await _service.GetAllAsync();
+            var result = await _teacherService.GetAllAsync();
             return Ok(new ResponseDTO { IsValid = true, Data = result });
         }
 
         [HttpPost("get-teacher-by-id/{id}")]
         [Authorize(Roles = "SuperAdmin,Teacher")]
-        public async Task<IActionResult> GetById([FromRoute] string id)
+        public async Task<IActionResult> GetTeacherById([FromRoute] string id)
         {
-            var result = await _service.GetByIdAsync(id);
+            var result = await _teacherService.GetByIdAsync(id);
             if (result == null)
                 return NotFound(new ResponseDTO { IsValid = false, Error = "Teacher not found" });
             return Ok(new ResponseDTO { IsValid = true, Data = result });
@@ -102,7 +102,7 @@ namespace FosoolSchool.Controllers
 
         [HttpPost("create-teacher-basic")]
         [Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> CreateBasic([FromBody] CreateTeacherDTO dto)
+        public async Task<IActionResult> CreateBasicTeacher([FromBody] CreateTeacherDTO dto)
         {
             var userId = GetUserIdFromToken();
             var result = await _teacherService.AddBasicAsync(dto, userId);
@@ -111,7 +111,7 @@ namespace FosoolSchool.Controllers
 
         [HttpPost("add-teacher-details")]
         [Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> AddDetails([FromBody] UpdateTeacherDetailsDTO dto)
+        public async Task<IActionResult> AddDetailsTeacher([FromBody] UpdateTeacherDetailsDTO dto)
         {
             var userId = GetUserIdFromToken();
             await _teacherService.AddDetailsAsync(dto, userId);
@@ -120,9 +120,9 @@ namespace FosoolSchool.Controllers
 
         [HttpPost("delete-teacher/{id}")]
         [Authorize(Roles = "SuperAdmin")]
-        public async Task<IActionResult> Delete([FromRoute] string id)
+        public async Task<IActionResult> DeleteTeacher([FromRoute] string id)
         {
-            await _service.DeleteAsync(id);
+            await _teacherService.DeleteAsync(id);
             return Ok(new ResponseDTO { IsValid = true, Message = "Teacher deleted successfully" });
         }
     }

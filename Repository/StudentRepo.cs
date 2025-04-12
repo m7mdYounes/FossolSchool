@@ -17,7 +17,7 @@ namespace FosoolSchool.Repository
         {
             return await _context.Set<Student>()
                 .Include(s => s.User)
-                .Include(s => s.Teacher).ThenInclude(t => t.User)
+                .Include(s => s.Teacher)
                 .Include(s => s.Class)
                 .Where(s => !s.IsDeleted)
                 .ToListAsync();
@@ -27,7 +27,7 @@ namespace FosoolSchool.Repository
         {
             return await _context.Set<Student>()
                 .Include(s => s.User)
-                .Include(s => s.Teacher).ThenInclude(t => t.User)
+                .Include(s => s.Teacher)
                 .Include(s => s.Class)
                 .FirstOrDefaultAsync(s => s.Id == id && !s.IsDeleted);
         }
@@ -36,7 +36,7 @@ namespace FosoolSchool.Repository
         {
             return await _context.Set<Student>()
                 .Include(s => s.User)
-                .Include(s => s.Teacher).ThenInclude(t => t.User)
+                .Include(s => s.Teacher)
                 .Include(s => s.Class)
                 .Where(s => s.TeacherId == teacherId && !s.IsDeleted)
                 .ToListAsync();

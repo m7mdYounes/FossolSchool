@@ -21,6 +21,12 @@ namespace FosoolSchool.Repository
         {
             await _context.Users.AddAsync(user);
         }
+        public async Task<List<User>> GetUsersByIdsAsync(List<string> ids)
+        {
+            return await _context.Users
+                .Where(u => ids.Contains(u.Id) && !u.IsDeleted)
+                .ToListAsync();
+        }
 
         public async Task SaveChangesAsync()
         {

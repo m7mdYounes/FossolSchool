@@ -29,7 +29,7 @@ namespace FosoolSchool.Services
                 UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
-                TeacherName = s.Teacher?.User?.UserName,
+                //TeacherName = s.Teacher?.User?.UserName,
                 ClassId = s.ClassId,
                 ClassName = s.Class?.Name
             }).ToList();
@@ -44,7 +44,7 @@ namespace FosoolSchool.Services
                 UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
-                TeacherName = s.Teacher?.User?.UserName,
+                //TeacherName = s.Teacher?.User?.UserName,
                 ClassId = s.ClassId,
                 ClassName = s.Class?.Name
             };
@@ -59,7 +59,7 @@ namespace FosoolSchool.Services
                 UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
-                TeacherName = s.Teacher?.User?.UserName,
+                //TeacherName = s.Teacher?.User?.UserName,
                 ClassId = s.ClassId,
                 ClassName = s.Class?.Name
             }).ToList();

@@ -16,7 +16,6 @@ namespace FosoolSchool.Repository
         public async Task<List<Teacher>> GetAllAsync()
         {
             return await _context.Set<Teacher>()
-                .Include(t => t.User)
                 .Include(t => t.TeacherTerms).ThenInclude(tt => tt.AcademicTerm)
                 .Include(t => t.TeacherSubjects).ThenInclude(ts => ts.Grade).ThenInclude(g => g.Level)
                 .Include(t => t.TeacherSubjects).ThenInclude(ts => ts.Subject)
@@ -27,7 +26,6 @@ namespace FosoolSchool.Repository
         public async Task<Teacher> GetByIdAsync(string id)
         {
             return await _context.Set<Teacher>()
-                .Include(t => t.User)
                 .Include(t => t.TeacherTerms).ThenInclude(tt => tt.AcademicTerm)
                 .Include(t => t.TeacherSubjects).ThenInclude(ts => ts.Grade).ThenInclude(g => g.Level)
                 .Include(t => t.TeacherSubjects).ThenInclude(ts => ts.Subject)

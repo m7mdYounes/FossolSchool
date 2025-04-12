@@ -1,6 +1,7 @@
 ﻿using FosoolSchool.DTO.Teacher;
 using FosoolSchool.Models;
 using FosoolSchool.Models.TeacherEntities;
+using FosoolSchool.Repository;
 using FosoolSchool.Repository.Interfaces;
 using FosoolSchool.Services;
 using FosoolSchool.Services.Interfaces;
@@ -12,21 +13,26 @@ namespace FosoolSchool.Services
     {
         private readonly ITeacherRepo _repository;
         private readonly IAuthService _authService;
+        private readonly IUserRepo _userRepo;
 
-        public TeacherService(ITeacherRepo repository, IAuthService authService)
+        public TeacherService(ITeacherRepo repository, IAuthService authService, IUserRepo userRepo)
         {
             _repository = repository;
             _authService = authService;
+            _userRepo = userRepo;
         }
 
         public async Task<List<TeacherViewDTO>> GetAllAsync()
         {
             var teachers = await _repository.GetAllAsync();
+            var userIds = teachers.Select(t => t.Id).ToList();
+            var users = await _userRepo.GetUsersByIdsAsync(userIds);
+
             return teachers.Select(t => new TeacherViewDTO
             {
                 Id = t.Id,
-                UserName = t.User?.UserName,
-                UserEmail = t.User?.UserEmail,
+                UserName = users.FirstOrDefault(u => u.Id == t.Id)?.UserName,
+                UserEmail = users.FirstOrDefault(u => u.Id == t.Id)?.UserEmail,
                 AcademicTerms = t.TeacherTerms.Select(tt => tt.AcademicTerm?.Name).Distinct().ToList(),
                 LevelsGradesSubjects = t.TeacherSubjects
                     .GroupBy(s => s.Grade.Level)
@@ -49,17 +55,18 @@ namespace FosoolSchool.Services
             }).ToList();
         }
 
-
         public async Task<TeacherViewDTO> GetByIdAsync(string id)
         {
             var t = await _repository.GetByIdAsync(id);
             if (t == null) return null;
 
+            var users = await _userRepo.GetUsersByIdsAsync(new List<string>() { t.Id });
+            var user = users.FirstOrDefault();
             return new TeacherViewDTO
             {
                 Id = t.Id,
-                UserName = t.User?.UserName,
-                UserEmail = t.User?.UserEmail,
+                UserName = user?.UserName,
+                UserEmail = user?.UserEmail,
                 AcademicTerms = t.TeacherTerms.Select(tt => tt.AcademicTerm?.Name).Distinct().ToList(),
                 LevelsGradesSubjects = t.TeacherSubjects
                     .GroupBy(s => s.Grade.Level)
@@ -81,7 +88,6 @@ namespace FosoolSchool.Services
                     }).ToList()
             };
         }
-
         public async Task<ResponseDTO> AddBasicAsync(CreateTeacherDTO dto, string creatorId)
         {
             var register = new RegisterDTO
@@ -98,8 +104,7 @@ namespace FosoolSchool.Services
 
             var teacher = new Teacher
             {
-                Id = Guid.NewGuid().ToString(),
-                UserId = userId,
+                Id = userId,
                 CreatedAt = DateTime.UtcNow,
                 CreatedUserId = creatorId
             };
