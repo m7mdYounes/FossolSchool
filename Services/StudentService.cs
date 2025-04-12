@@ -76,7 +76,7 @@ namespace FosoolSchool.Services
                 Role = UserRole.Student.ToString(),
                 Password = dto.Password,
             };
-            var (response, registeredUserId) = await _authService.RegisterAsync(usermodel);
+            var (response, registeredUserId) = await _authService.RegisterAsync(usermodel,userId);
 
             if (!response.IsValid)
             {

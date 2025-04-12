@@ -26,7 +26,7 @@ namespace FosoolSchool.Services
             _context = context;
         }
 
-        public async Task<(ResponseDTO,string)> RegisterAsync(RegisterDTO model)
+        public async Task<(ResponseDTO,string)> RegisterAsync(RegisterDTO model, string CreatedUserId)
         {
             var existingUser = await _userRepository.GetByEmailAsync(model.Email);
             if (existingUser != null)
@@ -39,20 +39,13 @@ namespace FosoolSchool.Services
                 Id = Guid.NewGuid().ToString(),
                 UserName = model.UserName,
                 UserEmail = model.Email,
-                UserRole = (UserRole)Enum.Parse(typeof(UserRole), model.Role)
+                UserRole = (UserRole)Enum.Parse(typeof(UserRole), model.Role),
+                CreatedUserId = CreatedUserId,
+                CreatedAt = DateTime.Now
             };
 
             user.Password = _passwordHasher.HashPassword(user, model.Password);
             await _userRepository.AddAsync(user);
-
-            if (model.Role == "Teacher")
-            {
-                await _context.Teachers.AddAsync(new Teacher { UserId = user.Id });
-            }
-            else if (model.Role == "SuperAdmin")
-            {
-                // future admin logic
-            }
 
             await _userRepository.SaveChangesAsync();
 

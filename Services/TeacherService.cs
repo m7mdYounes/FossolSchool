@@ -92,7 +92,7 @@ namespace FosoolSchool.Services
                 Role = UserRole.Teacher.ToString()
             };
 
-            var (response, userId) = await _authService.RegisterAsync(register);
+            var (response, userId) = await _authService.RegisterAsync(register,creatorId);
             if (!response.IsValid)
                 return response;
 
@@ -105,7 +105,7 @@ namespace FosoolSchool.Services
             };
 
             await _repository.AddAsync(teacher);
-            return new ResponseDTO { IsValid = true, Message = "Teacher created successfully" };
+            return new ResponseDTO { IsValid = true, Message = "Teacher created successfully",Data = userId };
         }
 
         public async Task AddDetailsAsync(UpdateTeacherDetailsDTO dto, string updaterId)
