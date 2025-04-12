@@ -1,4 +1,5 @@
-﻿using FosoolSchool.Models;
+﻿using FosoolSchool.DTO.Auth;
+using FosoolSchool.Models;
 using FosoolSchool.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,7 +17,7 @@ namespace FosoolSchool.Services
             _config = config;
         }
 
-        public string GenerateToken(User user)
+        public tokenDTO GenerateToken(User user)
         {
             var claims = new List<Claim>
         {
@@ -34,7 +35,7 @@ namespace FosoolSchool.Services
                 signingCredentials: creds
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new tokenDTO() { token = new JwtSecurityTokenHandler().WriteToken(token), role = user.UserRole.ToString() };
         }
     }
 }

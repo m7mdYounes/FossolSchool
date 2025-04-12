@@ -1,9 +1,10 @@
-﻿using FosoolSchool.Models;
+﻿using FosoolSchool.DTO.Auth;
+using FosoolSchool.Models;
 
 namespace FosoolSchool.Services.Interfaces
 {
     public interface ITokenService
     {
-        string GenerateToken(User user);
+        tokenDTO GenerateToken(User user);
     }
 }
