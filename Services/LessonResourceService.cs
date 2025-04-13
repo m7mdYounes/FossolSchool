@@ -89,6 +89,8 @@ namespace FosoolSchool.Services
                     FileType = Path.GetExtension(dto.File.FileName),
                     LessonId = dto.LessonId,
                     UploadedById = userId,
+                    CreatedAt =DateTime.UtcNow,
+                    CreatedUserId = userId,
                 };
 
                 await _repo.AddAsync(resource);

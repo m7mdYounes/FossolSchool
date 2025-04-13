@@ -40,7 +40,11 @@ namespace FosoolSchool.Repository
                 {
                     TeacherId = teacherId,
                     ResourceId = resourceId,
-                    IsVisible = false
+                    IsVisible = false,
+                    UpdatedAt = DateTime.UtcNow,
+                    UpdatedUserId = teacherId,
+                    CreatedUserId = teacherId,
+                    CreatedAt = DateTime.UtcNow,
                 });
             }
             else
