@@ -23,13 +23,13 @@ namespace FosoolSchool.Controllers
             return _httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         }
 
-        [Authorize(Roles = "SuperAdmin")]
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDTO model)
-        {
-            var result = await _authService.RegisterAsync(model,GetUserIdFromToken());
-            return Ok(result);
-        }
+        //[Authorize(Roles = "SuperAdmin")]
+        //[HttpPost("register")]
+        //public async Task<IActionResult> Register(RegisterDTO model)
+        //{
+        //    var result = await _authService.RegisterAsync(model,GetUserIdFromToken());
+        //    return Ok(result);
+        //}
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDTO model)
