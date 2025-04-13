@@ -4,7 +4,6 @@
     {
         public string Name { get; set; }
         public string GradeId { get; set; }
-        public string SubjectId { get; set; }
     }
 
     public class AssignStudentsToClassDTO

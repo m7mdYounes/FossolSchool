@@ -33,7 +33,6 @@ namespace FosoolSchool.Services
             var result = students.Select(s => new UpdateGetStudentDTO
             {
                 Id = s.Id,
-                UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
                 TeacherName = s.TeacherId != null && teacherDict.ContainsKey(s.TeacherId)
@@ -64,7 +63,6 @@ namespace FosoolSchool.Services
             return new UpdateGetStudentDTO
             {
                 Id = s.Id,
-                UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
                 TeacherName = teacherName,
@@ -85,7 +83,6 @@ namespace FosoolSchool.Services
             return students.Select(s => new UpdateGetStudentDTO
             {
                 Id = s.Id,
-                UserId = s.UserId,
                 UserName = s.User?.UserName,
                 TeacherId = s.TeacherId,
                 TeacherName = teacherName, 
@@ -97,8 +94,8 @@ namespace FosoolSchool.Services
 
         public async Task AddAsync(CreateStudentDTO dto, string userId)
         {
-            if (dto.UserEmail == null) dto.UserEmail = $"{dto.UserName}student@example.com";
-            if (dto.Password == null) dto.Password = $"{dto.UserName}@1234";
+            if (dto.UserEmail == null) dto.UserEmail = $"{Guid.NewGuid}@example.com";
+            if (dto.Password == null) dto.Password = $"{Guid.NewGuid}";
             var usermodel = new RegisterDTO()
             {
                 UserName = dto.UserName,
@@ -130,7 +127,7 @@ namespace FosoolSchool.Services
         {
             var student = await _repository.GetByIdAsync(id);
             if (student == null) return;
-            student.UserId = dto.UserId;
+            student.UserId = dto.Id;
             student.TeacherId = dto.TeacherId;
             student.ClassId = dto.ClassId;
             student.UpdatedAt = DateTime.UtcNow;

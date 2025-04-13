@@ -30,14 +30,11 @@ namespace FosoolSchool.Services
                     Name = c.Name,
                     GradeId = c.GradeId,
                     GradeName = c.Grade?.Name,
-                    SubjectId = c.SubjectId,
-                    SubjectName = c.Subject?.Name,
                     LevelId = c.Grade?.LevelId,
                     LevelName = c.Grade?.Level?.Name,
                     studentDTOs = students.Select(s => new UpdateGetStudentDTO
                     {
                         Id = s.Id,
-                        UserId = s.UserId,
                         UserName = s.User?.UserName,
                     }).ToList()
                 };
@@ -62,14 +59,11 @@ namespace FosoolSchool.Services
                 Name = c.Name,
                 GradeId = c.GradeId,
                 GradeName = c.Grade?.Name,
-                SubjectId = c.SubjectId,
-                SubjectName = c.Subject?.Name,
                 LevelId = c.Grade?.LevelId,
                 LevelName = c.Grade?.Level?.Name,
                 studentDTOs = students.Select(s => new UpdateGetStudentDTO
                 {
                     Id = s.Id,
-                    UserId = s.UserId,
                     UserName = s.User?.UserName,  
                 }).ToList()
             };
@@ -86,7 +80,6 @@ namespace FosoolSchool.Services
                 Id = Guid.NewGuid().ToString(),
                 Name = dto.Name,
                 GradeId = dto.GradeId,
-                SubjectId = dto.SubjectId,
                 TeacherId = teacherId,
                 CreatedAt = DateTime.UtcNow
             };
@@ -100,7 +93,6 @@ namespace FosoolSchool.Services
 
             entity.Name = dto.Name;
             entity.GradeId = dto.GradeId;
-            entity.SubjectId = dto.SubjectId;
             entity.UpdatedAt = DateTime.UtcNow;
             await _repo.UpdateAsync(entity);
         }

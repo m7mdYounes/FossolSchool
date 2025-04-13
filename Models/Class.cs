@@ -14,15 +14,6 @@ namespace FosoolSchool.Models
         [ForeignKey("Grade")]
         public string GradeId { get; set; }
         public virtual Grade Grade { get; set; }
-
-        [ForeignKey("Level")]
-        public string LevelId { get; set; }
-        public virtual Level Level { get; set; }
-
-        [ForeignKey("Subject")]
-        public string SubjectId { get; set; }
-        public virtual Subject Subject { get; set; }
-
         public virtual List<Student> Students { get; set; } = new();
     }
 

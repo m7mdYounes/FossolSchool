@@ -89,15 +89,6 @@ namespace FosoolSchool.Controllers
 
         #region teacher 
 
-        [HttpPost("get-students-by-teacher")]
-        [Authorize(Roles = "SuperAdmin,Teacher")]
-        public async Task<IActionResult> GetStudentsByTeacherId()
-        {
-            var teacherId = GetUserIdFromToken();
-            var result = await _service.GetByTeacherIdAsync(teacherId);
-            return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Students by teacher retrieved successfully" });
-        }
-
         [HttpPost("get-teacher-all")]
         [Authorize(Roles = "SuperAdmin")]
         public async Task<IActionResult> GetAllTeachers()

@@ -18,7 +18,6 @@ namespace FosoolSchool.Repository
         {
             return await _context.Set<Class>()
                 .Include(c => c.Grade).ThenInclude(g => g.Level)
-                .Include(c => c.Subject)
                 .Where(c => !c.IsDeleted)
                 .ToListAsync();
         }
@@ -27,7 +26,6 @@ namespace FosoolSchool.Repository
         {
             return await _context.Set<Class>()
                 .Include(c => c.Grade).ThenInclude(g => g.Level)
-                .Include(c => c.Subject)
                 .FirstOrDefaultAsync(c => c.Id == id && !c.IsDeleted);
         }
 

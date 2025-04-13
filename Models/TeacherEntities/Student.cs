@@ -7,7 +7,6 @@ namespace FosoolSchool.Models.TeacherEntities
         [ForeignKey("User")]
         public string UserId { get; set; }
         public virtual User User { get; set; }
-
         [ForeignKey("Teacher")]
         public string TeacherId { get; set; }
         public virtual Teacher Teacher { get; set; }
