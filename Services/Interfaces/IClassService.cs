@@ -1,4 +1,5 @@
 ﻿using FosoolSchool.DTO.Class;
+using FosoolSchool.DTO.Student;
 
 namespace FosoolSchool.Services.Interfaces
 {
@@ -10,5 +11,6 @@ namespace FosoolSchool.Services.Interfaces
         Task UpdateAsync(string id, UpdateGetClassDTO dto);
         Task DeleteAsync(string id);
         Task AssignStudentsToClassAsync(string classId, List<string> studentIds);
+        Task<List<UpdateGetStudentDTO>> GetStudentByClassIdAsync(string classId);
     }
 }

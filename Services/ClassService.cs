@@ -69,22 +69,19 @@ namespace FosoolSchool.Services
             };
         }
 
-        //public async Task GetStudentbyclassid(string classid)
-        //{
-        //    var students = await _repo.GetStudentsByClassIdAsync(classid);
-        //    var result = new List<UpdateGetStudentDTO>();
-        //    foreach(var s in students)
-        //    {
-        //        var student = new UpdateGetStudentDTO()
-        //        {
-        //            Id = s.Id,
-        //            UserName = s.User?.UserName,
+        public async Task<List<UpdateGetStudentDTO>> GetStudentByClassIdAsync(string classId)
+        {
+            var students = await _repo.GetStudentsByClassIdAsync(classId);
 
-        //        };
-        //        result.Add(student);
-        //    }
-        //    await result;
-        //}
+            return students.Select(s => new UpdateGetStudentDTO
+            {
+                Id = s.Id,
+                UserName = s.User?.UserName,
+                TeacherId = s.TeacherId,
+                ClassId = s.ClassId
+            }).ToList();
+        }
+
 
         public async Task AssignStudentsToClassAsync(string classId, List<string> studentIds)
         {
@@ -98,7 +95,8 @@ namespace FosoolSchool.Services
                 Name = dto.Name,
                 GradeId = dto.GradeId,
                 TeacherId = teacherId,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                CreatedUserId = teacherId
             };
             await _repo.AddAsync(entity);
         }

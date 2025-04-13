@@ -33,6 +33,15 @@ namespace FosoolSchool.Controllers
             return Ok(new ResponseDTO { IsValid = true, Data = result });
         }
 
+        [HttpPost("get-students-by-class-id/{id}")]
+        public async Task<IActionResult> GetStudentsByClassId(string classid)
+        {
+            var result = await _service.GetStudentByClassIdAsync(classid);
+            if (result == null)
+                return NotFound(new ResponseDTO { IsValid = false, Error = "Class not found" });
+            return Ok(new ResponseDTO { IsValid = true, Data = result });
+        }
+
         [HttpPost("get-by-id/{id}")]
         public async Task<IActionResult> GetById(string id)
         {

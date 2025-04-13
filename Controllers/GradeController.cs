@@ -9,7 +9,6 @@ namespace FosoolSchool.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "SuperAdmin")]
     public class GradeController : ControllerBase
     {
         private readonly IGradeService _service;
@@ -25,13 +24,14 @@ namespace FosoolSchool.Controllers
         {
             return _httpContextAccessor.HttpContext?.User?.Claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         }
-
+        [Authorize(Roles = "SuperAdmin,Teacher")]
         [HttpPost("get-all")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAllAsync();
             return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Grades retrieved successfully" });
         }
+        [Authorize(Roles = "SuperAdmin,Teacher")]
 
         [HttpPost("get-by-id/{id}")]
         public async Task<IActionResult> GetById([FromRoute] string id)
@@ -42,6 +42,7 @@ namespace FosoolSchool.Controllers
 
             return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Grade retrieved successfully" });
         }
+        [Authorize(Roles = "SuperAdmin,Teacher")]
 
         [HttpPost("get-by-level/{levelId}")]
         public async Task<IActionResult> GetByLevelId([FromRoute] string levelId)
@@ -49,6 +50,7 @@ namespace FosoolSchool.Controllers
             var result = await _service.GetByLevelIdAsync(levelId);
             return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Grades for level retrieved successfully" });
         }
+        [Authorize(Roles = "SuperAdmin")]
 
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateGradeDTO dto)
@@ -57,6 +59,7 @@ namespace FosoolSchool.Controllers
             await _service.AddAsync(dto, userId);
             return Ok(new ResponseDTO { IsValid = true, Message = "Grade created successfully" });
         }
+        [Authorize(Roles = "SuperAdmin")]
 
         [HttpPost("update/{id}")]
         public async Task<IActionResult> Update([FromRoute] string id, [FromBody] UpdateGetGradeDTO dto)
@@ -65,6 +68,7 @@ namespace FosoolSchool.Controllers
             await _service.UpdateAsync(id, dto, userId);
             return Ok(new ResponseDTO { IsValid = true, Message = "Grade updated successfully" });
         }
+        [Authorize(Roles = "SuperAdmin")]
 
         [HttpPost("delete/{id}")]
         public async Task<IActionResult> Delete([FromRoute] string id)
