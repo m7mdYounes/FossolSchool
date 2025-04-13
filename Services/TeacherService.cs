@@ -122,7 +122,9 @@ namespace FosoolSchool.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 TeacherId = dto.TeacherId,
-                SubjectId = subjectId
+                SubjectId = subjectId,
+                CreatedAt = DateTime.UtcNow,
+                CreatedUserId = updaterId
             });
 
             await _repository.AddSubjectsAsync(subjects);
@@ -131,7 +133,9 @@ namespace FosoolSchool.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 TeacherId = dto.TeacherId,
-                AcademicTermId = termId
+                AcademicTermId = termId,
+                CreatedAt = DateTime.UtcNow,
+                CreatedUserId = updaterId
             });
 
             await _repository.AddTermsAsync(terms);
