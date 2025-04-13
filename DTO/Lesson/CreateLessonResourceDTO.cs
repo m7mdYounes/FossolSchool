@@ -2,7 +2,7 @@
 {
     public class CreateLessonResourceDTO
     {
-        public IFormFile File { get; set; }
+        public ICollection<IFormFile> Files { get; set; }
         public string LessonId { get; set; }
     }
 }

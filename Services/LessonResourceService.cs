@@ -70,30 +70,33 @@ namespace FosoolSchool.Services
         {
             try
             {
-                string storageRoot = _config["StoragePath"] ?? "wwwroot/uploads";
-                string fileName = Guid.NewGuid() + Path.GetExtension(dto.File.FileName);
-                string fullPath = Path.Combine(storageRoot, fileName);
-
-                string relativePath = Path.Combine("uploads", fileName).Replace("\\", "/");
-
-                Directory.CreateDirectory(storageRoot);
-                using (var stream = new FileStream(fullPath, FileMode.Create))
+                foreach (var file in dto.Files)
                 {
-                    await dto.File.CopyToAsync(stream);
+                    string storageRoot = _config["StoragePath"] ?? "wwwroot/uploads";
+                    string fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                    string fullPath = Path.Combine(storageRoot, fileName);
+
+                    string relativePath = Path.Combine("uploads", fileName).Replace("\\", "/");
+
+                    Directory.CreateDirectory(storageRoot);
+                    using (var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+                    var resource = new LessonResource
+                    {
+                        FileName = fileName,
+                        FilePath = relativePath,
+                        FileType = Path.GetExtension(file.FileName),
+                        LessonId = dto.LessonId,
+                        UploadedById = userId,
+                        CreatedAt = DateTime.UtcNow,
+                        CreatedUserId = userId,
+                    };
+
+                    await _repo.AddAsync(resource);
                 }
-
-                var resource = new LessonResource
-                {
-                    FileName = fileName,
-                    FilePath = relativePath,
-                    FileType = Path.GetExtension(dto.File.FileName),
-                    LessonId = dto.LessonId,
-                    UploadedById = userId,
-                    CreatedAt =DateTime.UtcNow,
-                    CreatedUserId = userId,
-                };
-
-                await _repo.AddAsync(resource);
 
                 return new ResponseDTO
                 {
