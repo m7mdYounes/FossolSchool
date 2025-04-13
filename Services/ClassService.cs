@@ -69,6 +69,23 @@ namespace FosoolSchool.Services
             };
         }
 
+        //public async Task GetStudentbyclassid(string classid)
+        //{
+        //    var students = await _repo.GetStudentsByClassIdAsync(classid);
+        //    var result = new List<UpdateGetStudentDTO>();
+        //    foreach(var s in students)
+        //    {
+        //        var student = new UpdateGetStudentDTO()
+        //        {
+        //            Id = s.Id,
+        //            UserName = s.User?.UserName,
+
+        //        };
+        //        result.Add(student);
+        //    }
+        //    await result;
+        //}
+
         public async Task AssignStudentsToClassAsync(string classId, List<string> studentIds)
         {
             await _repo.AssignStudentsToClassAsync(classId, studentIds);

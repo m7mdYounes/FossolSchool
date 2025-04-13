@@ -14,12 +14,14 @@ namespace FosoolSchool.Services
         private readonly ITeacherRepo _repository;
         private readonly IAuthService _authService;
         private readonly IUserRepo _userRepo;
+        private readonly ISubjectRepo _subjectRepo;
 
-        public TeacherService(ITeacherRepo repository, IAuthService authService, IUserRepo userRepo)
+        public TeacherService(ITeacherRepo repository, IAuthService authService, IUserRepo userRepo , ISubjectRepo subjectRepo)
         {
             _repository = repository;
             _authService = authService;
             _userRepo = userRepo;
+            _subjectRepo = subjectRepo;
         }
 
         public async Task<List<TeacherViewDTO>> GetAllAsync()
@@ -118,11 +120,15 @@ namespace FosoolSchool.Services
             var teacher = await _repository.GetByIdAsync(dto.TeacherId);
             if (teacher == null) return;
 
+            var subject = await _subjectRepo.GetByIdAsync(dto.SubjectIds.FirstOrDefault());
+            var gradeId = subject?.GradeId;
+
             var subjects = dto.SubjectIds.Select(subjectId => new TeacherGradeSubject
             {
                 Id = Guid.NewGuid().ToString(),
                 TeacherId = dto.TeacherId,
                 SubjectId = subjectId,
+                GradeId = gradeId, 
                 CreatedAt = DateTime.UtcNow,
                 CreatedUserId = updaterId
             });
@@ -140,7 +146,8 @@ namespace FosoolSchool.Services
 
             await _repository.AddTermsAsync(terms);
         }
-       
+
+
         public async Task DeleteAsync(string id)
         {
             await _repository.SoftDeleteAsync(id);
