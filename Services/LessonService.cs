@@ -58,7 +58,7 @@ namespace FosoolSchool.Services
 
         public async Task AddAsync(CreateLessonDTO dto, string userId)
         {
-            var entity = new Lesson
+            var entity = new Models.Lesson.Lesson
             {
                 Id = Guid.NewGuid().ToString(),
                 Title = dto.Title,

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FosoolSchool.Models
+namespace FosoolSchool.Models.Lesson
 {
     public class Lesson : BaseEntity
     {

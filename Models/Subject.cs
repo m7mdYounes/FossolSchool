@@ -1,4 +1,5 @@
 ﻿using FosoolSchool.Models.TeacherEntities;
+using FosoolSchool.Models.Lesson;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FosoolSchool.Models
@@ -11,7 +12,7 @@ namespace FosoolSchool.Models
         public string GradeId { get; set; }
         public virtual Grade Grade { get; set; }
 
-        public virtual List<Lesson> Lessons { get; set; } = new();
+        public virtual List<Models.Lesson.Lesson> Lessons { get; set; } = new();
         public virtual List<TeacherGradeSubject> TeacherSubjects { get; set; } = new();
     }
 

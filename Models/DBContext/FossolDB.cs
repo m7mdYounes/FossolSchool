@@ -1,4 +1,5 @@
 ﻿using FosoolSchool.Models.TeacherEntities;
+using FosoolSchool.Models.Lesson;
 using Microsoft.EntityFrameworkCore;
 using static FosoolSchool.Consts.Enums;
 
@@ -19,10 +20,12 @@ namespace FosoolSchool.Models.DBContext
         public virtual DbSet<Level> Levels { get; set; }
         public virtual DbSet<Grade> Grades { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
-        public virtual DbSet<Lesson> Lessons { get; set; }
+        public virtual DbSet<Models.Lesson.Lesson> Lessons { get; set; }
         public virtual DbSet<TeacherTerm> TeacherTerms { get; set; }
         public virtual DbSet<TeacherGradeSubject> TeacherSubjects { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<LessonResource> LessonResources { get; set; }
+        public virtual DbSet<TeacherLessonResourceView> TeacherLessonResourceViews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

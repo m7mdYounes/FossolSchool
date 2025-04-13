@@ -1,5 +1,5 @@
-﻿using FosoolSchool.Models;
-using FosoolSchool.Models.DBContext;
+﻿using FosoolSchool.Models.DBContext;
+using FosoolSchool.Models.Lesson;
 using FosoolSchool.Repository.Interfaces;
 
 namespace FosoolSchool.Repository

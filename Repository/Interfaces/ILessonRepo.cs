@@ -1,4 +1,4 @@
-﻿using FosoolSchool.Models;
+﻿using FosoolSchool.Models.Lesson;
 
 namespace FosoolSchool.Repository.Interfaces
 {
