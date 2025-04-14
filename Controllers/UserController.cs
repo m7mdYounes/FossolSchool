@@ -49,7 +49,7 @@ namespace FosoolSchool.Controllers
             return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Student retrieved successfully" });
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "SuperAdmin,Teacher")]
         [HttpPost("get-students-by-id-teacher")]
         public async Task<IActionResult> GetStudentbyTeacherId()
         {
@@ -60,7 +60,7 @@ namespace FosoolSchool.Controllers
             return Ok(new ResponseDTO { IsValid = true, Data = result, Message = "Student retrieved successfully" });
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "SuperAdmin,Teacher")]
         [HttpPost("create-student")]
         public async Task<IActionResult> CreateStudent([FromBody] CreateStudentDTO dto)
         {
@@ -69,7 +69,7 @@ namespace FosoolSchool.Controllers
             return Ok(new ResponseDTO { IsValid = true, Message = "Student created successfully" });
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "SuperAdmin,Teacher")]
         [HttpPost("update-student/{id}")]
         public async Task<IActionResult> UpdateStudent([FromRoute] string id, [FromBody] UpdateGetStudentDTO dto)
         {
@@ -78,7 +78,7 @@ namespace FosoolSchool.Controllers
             return Ok(new ResponseDTO { IsValid = true, Message = "Student updated successfully" });
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "SuperAdmin,Teacher")]
         [HttpPost("delete-student/{id}")]
         public async Task<IActionResult> DeleteStudent([FromRoute] string id)
         {

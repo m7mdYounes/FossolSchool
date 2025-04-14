@@ -82,7 +82,7 @@ namespace FosoolSchool.Controllers
             return Ok(result);
         }
 
-        [HttpPost("lesson/{lessonId}")]
+        [HttpPost("lesson-get-resource/{lessonId}")]
         public async Task<IActionResult> GetResources([FromRoute]string lessonId)
         {
             var result = await _lessonResourceService.GetResourcesForTeacherAsync(lessonId, GetUserIdFromToken());

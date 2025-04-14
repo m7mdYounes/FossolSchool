@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace FosoolSchool.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles ="Teacher")]
+    [Authorize(Roles = "SuperAdmin,Teacher")]
     [ApiController]
     public class ClassController : ControllerBase
     {
